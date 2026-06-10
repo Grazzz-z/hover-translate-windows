@@ -5,7 +5,7 @@ import logging
 import os
 from pathlib import Path
 
-from app.core.local_dictionary import LocalDictionary
+from app.core.local_dictionary import DictionaryEntry, LocalDictionary
 from app.core.types import TranslationResult
 from app.utils.text_utils import candidate_terms_from_context, english_token_spans, normalize_text
 
@@ -293,19 +293,21 @@ class Translator:
     ) -> TranslationResult:
         glosses: list[str] = []
         seen: set[str] = set()
+        covered_tokens: set[str] = set()
 
         for entry in self._dictionary.lookup_terms_in_text(sentence):
             normalized_entry = entry.word.lower()
             if normalized_entry in seen:
                 continue
             seen.add(normalized_entry)
+            covered_tokens.update(token.lower() for token, _, _ in english_token_spans(entry.word))
             translation = _first_translation_line(entry.translation)
             if translation:
                 glosses.append(f"{entry.word}: {translation}")
 
         for token, _, _ in english_token_spans(sentence):
             word = token.lower()
-            if word in seen:
+            if word in seen or word in covered_tokens:
                 continue
             seen.add(word)
             entry = self._dictionary.lookup(word)
@@ -328,7 +330,7 @@ class Translator:
             is_sentence=True,
         )
 
-    def _lookup_best_local_entry(self, word: str, context: str | None) -> object | None:
+    def _lookup_best_local_entry(self, word: str, context: str | None) -> DictionaryEntry | None:
         for candidate in candidate_terms_from_context(word, context):
             entry = self._dictionary.lookup(candidate)
             if entry is not None:
@@ -356,6 +358,7 @@ def _source_label(source: str) -> str:
     labels = {
         "user-terms": "User glossary",
         "builtin-terms": "Built-in technical glossary",
+        "kaikki-terms": "Wiktionary/Kaikki glossary",
         "ecdict": "Local dictionary",
         "local-dictionary": "Local dictionary",
     }

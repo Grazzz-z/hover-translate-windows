@@ -13,6 +13,7 @@ DATA_DIR = PROJECT_ROOT / "data"
 CSV_PATH = DATA_DIR / "ecdict.csv"
 DB_PATH = DATA_DIR / "ecdict.sqlite"
 BUILTIN_TERMS_PATH = DATA_DIR / "tech_academic_terms.csv"
+KAIKKI_TERMS_PATH = DATA_DIR / "kaikki_terms.csv"
 USER_TERMS_PATH = DATA_DIR / "user_terms.csv"
 
 
@@ -32,18 +33,26 @@ class LocalDictionary:
         self,
         db_path: Path = DB_PATH,
         builtin_terms_path: Path = BUILTIN_TERMS_PATH,
+        kaikki_terms_path: Path = KAIKKI_TERMS_PATH,
         user_terms_path: Path = USER_TERMS_PATH,
     ) -> None:
         self._db_path = db_path
         self._builtin_terms_path = builtin_terms_path
+        self._kaikki_terms_path = kaikki_terms_path
         self._user_terms_path = user_terms_path
         self._term_cache_signature: tuple[tuple[str, int, int], ...] | None = None
         self._terms_exact: dict[str, DictionaryEntry] = {}
         self._terms_folded: dict[str, DictionaryEntry] = {}
+        self._terms_for_phrase_scan: list[tuple[str, DictionaryEntry]] = []
 
     @property
     def is_available(self) -> bool:
-        return self._db_path.exists() or self._builtin_terms_path.exists() or self._user_terms_path.exists()
+        return (
+            self._db_path.exists()
+            or self._kaikki_terms_path.exists()
+            or self._builtin_terms_path.exists()
+            or self._user_terms_path.exists()
+        )
 
     def lookup(self, word: str) -> DictionaryEntry | None:
         normalized = _normalize_term(word)
@@ -85,13 +94,7 @@ class LocalDictionary:
         self._refresh_term_cache()
         matches: list[DictionaryEntry] = []
         seen: set[str] = set()
-        terms = sorted(
-            self._terms_folded.items(),
-            key=lambda item: len(item[0]),
-            reverse=True,
-        )
-
-        for normalized_term, entry in terms:
+        for normalized_term, entry in self._terms_for_phrase_scan:
             if entry.word.lower() in seen:
                 continue
             if f" {normalized_term} " in normalized_text:
@@ -150,13 +153,16 @@ class LocalDictionary:
         return self._terms_exact.get(stripped) or self._terms_folded.get(_normalize_term(stripped))
 
     def _refresh_term_cache(self) -> None:
-        signature = _term_file_signature((self._user_terms_path, self._builtin_terms_path))
+        signature = _term_file_signature(
+            (self._user_terms_path, self._builtin_terms_path, self._kaikki_terms_path)
+        )
         if signature == self._term_cache_signature:
             return
 
         exact: dict[str, DictionaryEntry] = {}
         folded: dict[str, DictionaryEntry] = {}
         for path, source in (
+            (self._kaikki_terms_path, "kaikki-terms"),
             (self._builtin_terms_path, "builtin-terms"),
             (self._user_terms_path, "user-terms"),
         ):
@@ -168,6 +174,11 @@ class LocalDictionary:
 
         self._terms_exact = exact
         self._terms_folded = folded
+        self._terms_for_phrase_scan = sorted(
+            folded.items(),
+            key=lambda item: len(item[0]),
+            reverse=True,
+        )
         self._term_cache_signature = signature
 
 

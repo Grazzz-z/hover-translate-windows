@@ -44,6 +44,7 @@ app/
     text_utils.py
 scripts/
   download_local_models.py
+  import_kaikki_terms.py
 config.py
 main.py
 requirements.txt
@@ -55,8 +56,9 @@ Dictionary lookup uses this priority order:
 
 1. `data\user_terms.csv` for your own private terms
 2. `data\tech_academic_terms.csv` for built-in software, academic, AI, statistics, and bioinformatics terms
-3. `data\ecdict.sqlite` for the general English-Chinese dictionary
-4. Argos Translate as a local offline fallback when no glossary entry is found
+3. `data\kaikki_terms.csv` for an optional Wiktionary/Kaikki enhancement package
+4. `data\ecdict.sqlite` for the general English-Chinese dictionary
+5. Argos Translate as a local offline fallback when no glossary entry is found
 
 The app also tries phrase lookup before single-word lookup. For example, if the cursor is on `language` inside `large language model`, it first checks `large language model`.
 
@@ -66,6 +68,22 @@ To add your own terms, right-click the tray icon and choose `Open user glossary`
 term,translation,phonetic,definition,examples,tags,case_sensitive
 WeChat Work,企业微信,,Tencent enterprise collaboration platform,WeChat Work is used for company communication.,custom,false
 ```
+
+### Optional Wiktionary/Kaikki Enhancement
+
+Kaikki/Wiktionary data is large, so it is not bundled into the normal app or portable zip. If you want a bigger local glossary, download a raw JSONL.GZ dump from the [Kaikki raw data page](https://kaikki.org/dictionary/rawdata.html), then import a limited enhancement CSV:
+
+```powershell
+python scripts\import_kaikki_terms.py path\to\raw-wiktextract-data.jsonl.gz --max-terms 30000
+```
+
+You can also stream the official raw dump directly, but it is large and may take a while:
+
+```powershell
+python scripts\import_kaikki_terms.py --download --max-terms 30000
+```
+
+The script writes `data\kaikki_terms.csv`. Restart the app and it will automatically use the enhancement layer after your private and built-in glossaries.
 
 ## Prerequisites
 
