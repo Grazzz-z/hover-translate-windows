@@ -1,0 +1,10 @@
+PyQt6>=6.7.0
+argostranslate>=1.11.0
+mss>=9.0.1
+numpy>=1.26.4
+openai>=1.30.0
+paddleocr>=3.6.0,<3.7.0
+paddlepaddle>=3.3.1,<4.0.0
+pyinstaller>=6.20.0
+pynput>=1.7.7
+uiautomation>=2.0.20

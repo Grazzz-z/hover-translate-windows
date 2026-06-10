@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+.venv/
+venv/
+env/
+
+# Local runtime settings and logs
+settings.json
+logs/
+*.log
+gh-auth.out
+gh-auth.err
+
+# Build outputs
+build/
+dist/
+*.spec.tmp
+
+# Large local data/model artifacts
+data/*.csv
+data/*.sqlite
+data/*.sqlite.tmp
+models/
+*.argosmodel
+
+# IDE and OS files
+.idea/
+.vscode/
+.tools/
+.DS_Store
+Thumbs.db
+
+# PyInstaller
+*.manifest
+*.toc
