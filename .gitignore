@@ -24,6 +24,8 @@ dist/
 data/*.csv
 data/*.sqlite
 data/*.sqlite.tmp
+!data/tech_academic_terms.csv
+!data/user_terms.example.csv
 models/
 *.argosmodel
 

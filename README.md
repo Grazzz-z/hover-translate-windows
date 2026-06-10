@@ -16,6 +16,8 @@ Hotkey Translate is a lightweight Windows desktop app that translates the Englis
 - LRU cache for the last 100 translated words
 - Cartoon-style floating, non-focus-stealing tooltip UI
 - Local offline ECDICT dictionary backend by default
+- Built-in technical and academic glossary for product names, AI terms, statistics, and paper-reading vocabulary
+- Private user glossary via `data\user_terms.csv`
 - Local offline Argos sentence translation when the English-to-Chinese package is installed
 - Optional OpenAI backend for richer explanations
 - System tray menu for enable/disable and quit
@@ -45,6 +47,24 @@ scripts/
 config.py
 main.py
 requirements.txt
+```
+
+## Glossary Strategy
+
+Dictionary lookup uses this priority order:
+
+1. `data\user_terms.csv` for your own private terms
+2. `data\tech_academic_terms.csv` for built-in software, academic, AI, statistics, and bioinformatics terms
+3. `data\ecdict.sqlite` for the general English-Chinese dictionary
+4. Argos Translate as a local offline fallback when no glossary entry is found
+
+The app also tries phrase lookup before single-word lookup. For example, if the cursor is on `language` inside `large language model`, it first checks `large language model`.
+
+To add your own terms, right-click the tray icon and choose `Open user glossary`, then add rows like:
+
+```csv
+term,translation,phonetic,definition,examples,tags,case_sensitive
+WeChat Work,企业微信,,Tencent enterprise collaboration platform,WeChat Work is used for company communication.,custom,false
 ```
 
 ## Prerequisites

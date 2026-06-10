@@ -62,6 +62,8 @@ def add_data_path(source: Path, target: str) -> None:
 
 
 add_data_path(project_root / "data" / "ecdict.sqlite", "data")
+add_data_path(project_root / "data" / "tech_academic_terms.csv", "data")
+add_data_path(project_root / "data" / "user_terms.example.csv", "data")
 add_data_path(project_root / "README.md", ".")
 
 add_data_path(

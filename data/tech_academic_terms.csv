@@ -1,0 +1,73 @@
+term,translation,phonetic,definition,examples,tags,case_sensitive
+WeChat,微信,,Tencent messaging and social platform,WeChat is widely used in China.,software,false
+WeChat Pay,微信支付,,Mobile payment service inside WeChat,WeChat Pay supports QR-code payments.,software,false
+arXiv,arXiv 预印本平台,,Open-access repository for scholarly preprints,The paper first appeared on arXiv.,academic,false
+PubMed,PubMed 医学文献数据库,,Search engine for biomedical literature,We searched PubMed for randomized trials.,academic,false
+DOI,数字对象唯一标识符,,Digital Object Identifier for a publication,The DOI links to the article record.,academic,false
+PMID,PubMed 编号,,Identifier assigned to a PubMed record,The PMID uniquely identifies the abstract.,academic,false
+ORCID,ORCID 研究者身份标识,,Persistent identifier for researchers,The author provided an ORCID iD.,academic,false
+et al.,等人,,Abbreviation meaning and others,Smith et al. reported similar results.,academic,false
+in vitro,体外的；试管内的,,Performed outside a living organism,The assay was performed in vitro.,academic,false
+in vivo,体内的；活体内的,,Performed inside a living organism,The effect was validated in vivo.,academic,false
+p-value,P 值,,Probability measure used in statistical hypothesis testing,A p-value below 0.05 was considered significant.,statistics,false
+confidence interval,置信区间,,Range of values likely to contain an estimated parameter,The confidence interval was narrow.,statistics,false
+effect size,效应量,,Quantitative measure of the magnitude of an effect,The study reported a small effect size.,statistics,false
+statistical significance,统计显著性,,Likelihood that an observed result is not due to chance,The result reached statistical significance.,statistics,false
+randomized controlled trial,随机对照试验,,Study design that randomly assigns participants to groups,The randomized controlled trial tested the intervention.,academic,false
+systematic review,系统综述,,Structured review of evidence using predefined methods,The systematic review included 42 studies.,academic,false
+meta-analysis,荟萃分析,,Statistical synthesis of results from multiple studies,The meta-analysis found a modest benefit.,academic,false
+cohort study,队列研究,,Observational study following a group over time,The cohort study tracked patients for five years.,academic,false
+cross-sectional study,横断面研究,,Study observing variables at one point in time,The cross-sectional study measured prevalence.,academic,false
+case-control study,病例对照研究,,Study comparing individuals with and without an outcome,The case-control study examined risk factors.,academic,false
+large language model,大语言模型,,Machine-learning model trained on large text corpora,Large language models can generate fluent text.,ai,false
+LLM,大语言模型,,Abbreviation for large language model,The LLM was evaluated on reasoning tasks.,ai,false
+Transformer,Transformer 模型,,Neural network architecture based on attention,The Transformer architecture improved sequence modeling.,ai,false
+attention mechanism,注意力机制,,Neural network mechanism that weights relevant information,The attention mechanism highlights important tokens.,ai,false
+self-attention,自注意力,,Attention mechanism within the same sequence,Self-attention connects tokens in a sentence.,ai,false
+embedding,嵌入表示,,Vector representation of data such as words or documents,The embedding captures semantic similarity.,ai,false
+fine-tuning,微调,,Adapting a pretrained model to a specific task,Fine-tuning improved domain performance.,ai,false
+prompt engineering,提示词工程,,Designing prompts to guide model behavior,Prompt engineering changed the model output.,ai,false
+retrieval-augmented generation,检索增强生成,,Generation method that retrieves external knowledge first,Retrieval-augmented generation reduces hallucination.,ai,false
+RAG,检索增强生成,,Abbreviation for retrieval-augmented generation,RAG adds retrieved passages to the prompt.,ai,false
+backpropagation,反向传播,,Algorithm for computing gradients in neural networks,Backpropagation updates the model parameters.,ai,false
+gradient descent,梯度下降,,Optimization algorithm that follows negative gradients,Gradient descent minimized the loss function.,ai,false
+overfitting,过拟合,,Model performs well on training data but poorly on new data,Regularization helps reduce overfitting.,ai,false
+underfitting,欠拟合,,Model is too simple to capture the underlying pattern,The shallow model suffered from underfitting.,ai,false
+neural network,神经网络,,Computational model composed of connected layers,The neural network classified the image.,ai,false
+convolutional neural network,卷积神经网络,,Neural network often used for images,The convolutional neural network extracted visual features.,ai,false
+CNN,卷积神经网络,,Abbreviation for convolutional neural network,A CNN was used for image classification.,ai,false
+recurrent neural network,循环神经网络,,Neural network designed for sequential data,The recurrent neural network processed time series.,ai,false
+RNN,循环神经网络,,Abbreviation for recurrent neural network,The RNN modeled sequential dependencies.,ai,false
+reinforcement learning,强化学习,,Learning by interacting with an environment and rewards,Reinforcement learning optimized the policy.,ai,false
+supervised learning,监督学习,,Learning from labeled examples,Supervised learning requires labeled data.,ai,false
+unsupervised learning,无监督学习,,Learning patterns without labeled outputs,Unsupervised learning discovered clusters.,ai,false
+semi-supervised learning,半监督学习,,Learning from a mix of labeled and unlabeled data,Semi-supervised learning reduced labeling cost.,ai,false
+zero-shot,零样本,,Using a model on a task without task-specific examples,The model achieved zero-shot transfer.,ai,false
+few-shot,少样本,,Using a small number of examples,Few-shot prompting improved accuracy.,ai,false
+ablation study,消融实验,,Experiment removing components to test their contribution,The ablation study confirmed the module mattered.,academic,false
+baseline,基线方法,,Reference method or result used for comparison,The new model outperformed the baseline.,academic,false
+benchmark,基准测试,,Standard test used to compare systems,The benchmark measures translation quality.,academic,false
+state of the art,当前最佳水平,,Best known performance or method at a given time,The method achieved state-of-the-art accuracy.,academic,false
+SOTA,当前最佳水平,,Abbreviation for state of the art,The model reached SOTA on the benchmark.,academic,false
+dataset,数据集,,Collection of data used for analysis or training,The dataset contains annotated images.,academic,false
+data augmentation,数据增强,,Technique that expands training data with transformations,Data augmentation improved robustness.,ai,false
+cross-validation,交叉验证,,Evaluation method splitting data into multiple folds,Cross-validation produced a stable estimate.,statistics,false
+regularization,正则化,,Technique to reduce overfitting by adding constraints,Regularization penalizes overly complex models.,ai,false
+normalization,归一化；标准化,,Scaling values to a common range or distribution,Normalization stabilized training.,statistics,false
+principal component analysis,主成分分析,,Dimensionality reduction method using orthogonal components,Principal component analysis revealed clusters.,statistics,false
+PCA,主成分分析,,Abbreviation for principal component analysis,PCA reduced the feature dimension.,statistics,false
+genome-wide association study,全基因组关联研究,,Study scanning genetic variants associated with traits,The genome-wide association study identified risk loci.,bioinformatics,false
+GWAS,全基因组关联研究,,Abbreviation for genome-wide association study,GWAS found several significant variants.,bioinformatics,false
+RNA-seq,RNA 测序,,Sequencing method for transcriptome analysis,RNA-seq measured gene expression.,bioinformatics,false
+scRNA-seq,单细胞 RNA 测序,,Single-cell RNA sequencing method,scRNA-seq identified rare cell types.,bioinformatics,false
+single-cell sequencing,单细胞测序,,Sequencing technology at single-cell resolution,Single-cell sequencing revealed cellular heterogeneity.,bioinformatics,false
+transcriptome,转录组,,Complete set of RNA transcripts in a cell or tissue,The transcriptome changed after treatment.,bioinformatics,false
+genotype,基因型,,Genetic constitution of an organism or variant,The genotype was associated with disease risk.,bioinformatics,false
+phenotype,表型,,Observable traits or characteristics,The phenotype was measured clinically.,bioinformatics,false
+bioinformatics,生物信息学,,Computational analysis of biological data,Bioinformatics tools processed sequencing reads.,bioinformatics,false
+preprint,预印本,,Manuscript shared publicly before peer review,The preprint has not yet been peer reviewed.,academic,false
+peer review,同行评审,,Evaluation of scholarly work by experts,Peer review improved the manuscript.,academic,false
+manuscript,稿件；论文手稿,,Draft or submitted academic paper,The manuscript was submitted to the journal.,academic,false
+citation,引用；引文,,Reference to a source or publication,The citation supports the claim.,academic,false
+bibliography,参考文献目录,,List of references in a document,The bibliography follows APA style.,academic,false
+supplementary material,补充材料,,Additional files or data accompanying a paper,The supplementary material contains extra tables.,academic,false

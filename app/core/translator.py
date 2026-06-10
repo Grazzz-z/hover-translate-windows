@@ -3,10 +3,11 @@ from __future__ import annotations
 import json
 import logging
 import os
+from pathlib import Path
 
 from app.core.local_dictionary import LocalDictionary
 from app.core.types import TranslationResult
-from app.utils.text_utils import english_token_spans, normalize_text
+from app.utils.text_utils import candidate_terms_from_context, english_token_spans, normalize_text
 
 try:
     import argostranslate.translate as argos_translate
@@ -97,14 +98,24 @@ class Translator:
             return "openai"
         return self._backend
 
+    def ensure_user_terms_file(self) -> Path:
+        return self._dictionary.ensure_user_terms_file()
+
     def _translate_local(self, word: str, context: str | None) -> TranslationResult:
-        entry = self._dictionary.lookup(word)
+        entry = self._lookup_best_local_entry(word, context)
         if entry is None:
+            if self.is_argos_configured():
+                return self._translate_argos(
+                    word,
+                    context,
+                    explanation="Dictionary miss; local offline fallback",
+                    source="local-argos-fallback",
+                )
             return TranslationResult(
                 word=word,
                 translation=word,
                 phonetic="",
-                explanation="Not found in local dictionary",
+                explanation="No local glossary match; add this term to data/user_terms.csv",
                 source="local-dictionary",
                 context=context,
             )
@@ -114,13 +125,20 @@ class Translator:
             word=entry.word,
             translation=translation or word,
             phonetic=f"/{entry.phonetic}/" if entry.phonetic else "",
-            explanation="Local dictionary",
-            source="local-dictionary",
+            explanation=_source_label(entry.source),
+            source=entry.source,
             context=context,
-            examples=_build_examples(entry.word, context, entry.translation),
+            examples=entry.examples or _build_examples(entry.word, context, entry.translation),
         )
 
-    def _translate_argos(self, word: str, context: str | None) -> TranslationResult:
+    def _translate_argos(
+        self,
+        word: str,
+        context: str | None,
+        *,
+        explanation: str = "Local offline translation",
+        source: str = "local-argos",
+    ) -> TranslationResult:
         translation = self._get_argos_translation()
         if translation is None:
             raise RuntimeError("Argos English-to-Chinese model is not installed.")
@@ -130,8 +148,8 @@ class Translator:
             word=word,
             translation=translated or word,
             phonetic="",
-            explanation="Local offline translation",
-            source="local-argos",
+            explanation=explanation,
+            source=source,
             context=context,
             examples=_build_examples(word, context, ""),
         )
@@ -276,6 +294,15 @@ class Translator:
         glosses: list[str] = []
         seen: set[str] = set()
 
+        for entry in self._dictionary.lookup_terms_in_text(sentence):
+            normalized_entry = entry.word.lower()
+            if normalized_entry in seen:
+                continue
+            seen.add(normalized_entry)
+            translation = _first_translation_line(entry.translation)
+            if translation:
+                glosses.append(f"{entry.word}: {translation}")
+
         for token, _, _ in english_token_spans(sentence):
             word = token.lower()
             if word in seen:
@@ -301,6 +328,13 @@ class Translator:
             is_sentence=True,
         )
 
+    def _lookup_best_local_entry(self, word: str, context: str | None) -> object | None:
+        for candidate in candidate_terms_from_context(word, context):
+            entry = self._dictionary.lookup(candidate)
+            if entry is not None:
+                return entry
+        return self._dictionary.lookup(word)
+
     def _get_client(self) -> OpenAI:
         if OpenAI is None:
             raise RuntimeError("openai is not installed.")
@@ -316,6 +350,16 @@ def _format_dictionary_translation(translation: str, definition: str) -> str:
     source = translation or definition
     lines = [line.strip() for line in source.splitlines() if line.strip()]
     return "\n".join(lines[:3])
+
+
+def _source_label(source: str) -> str:
+    labels = {
+        "user-terms": "User glossary",
+        "builtin-terms": "Built-in technical glossary",
+        "ecdict": "Local dictionary",
+        "local-dictionary": "Local dictionary",
+    }
+    return labels.get(source, source or "Local dictionary")
 
 
 def _first_translation_line(translation: str) -> str:

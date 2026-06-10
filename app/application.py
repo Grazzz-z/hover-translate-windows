@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import logging
+import os
+import subprocess
 from concurrent.futures import Future, ThreadPoolExecutor
 
 from PyQt6.QtCore import QObject, pyqtSignal
@@ -80,6 +82,7 @@ class HoverTranslateController(QObject):
 
         self._tray.toggle_requested.connect(self.toggle_enabled)
         self._tray.settings_requested.connect(self.open_settings)
+        self._tray.user_terms_requested.connect(self.open_user_terms)
         self._tray.examples_toggle_requested.connect(self.toggle_examples)
         self._tray.quit_requested.connect(self._qt_app.quit)
 
@@ -124,6 +127,15 @@ class HoverTranslateController(QObject):
 
     def toggle_examples(self) -> None:
         self._set_examples_visible(not self._settings.show_examples)
+
+    def open_user_terms(self) -> None:
+        path = self._translator.ensure_user_terms_file()
+        self._cache = LRUCache(self._settings.cache_size)
+        try:
+            os.startfile(path)  # type: ignore[attr-defined]
+        except OSError:
+            subprocess.Popen(["notepad.exe", str(path)])
+        self._window.show_status("User glossary opened", self._cursor_position())
 
     def _warm_up_ocr(self) -> None:
         try:

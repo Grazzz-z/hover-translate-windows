@@ -8,6 +8,7 @@ from PyQt6.QtWidgets import QApplication, QMenu, QStyle, QSystemTrayIcon
 class AppTrayIcon(QSystemTrayIcon):
     toggle_requested = pyqtSignal()
     settings_requested = pyqtSignal()
+    user_terms_requested = pyqtSignal()
     examples_toggle_requested = pyqtSignal()
     quit_requested = pyqtSignal()
 
@@ -19,6 +20,9 @@ class AppTrayIcon(QSystemTrayIcon):
         self._settings_action = QAction("Settings...")
         self._settings_action.triggered.connect(self.settings_requested.emit)
 
+        self._user_terms_action = QAction("Open user glossary")
+        self._user_terms_action.triggered.connect(self.user_terms_requested.emit)
+
         self._toggle_action = QAction("Disable hotkey translation")
         self._toggle_action.triggered.connect(self.toggle_requested.emit)
 
@@ -29,6 +33,7 @@ class AppTrayIcon(QSystemTrayIcon):
         self._quit_action.triggered.connect(self.quit_requested.emit)
 
         self._menu.addAction(self._settings_action)
+        self._menu.addAction(self._user_terms_action)
         self._menu.addSeparator()
         self._menu.addAction(self._toggle_action)
         self._menu.addAction(self._examples_action)

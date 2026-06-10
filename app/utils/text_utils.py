@@ -101,5 +101,50 @@ def choose_sentence_from_text(
     return max(candidates, key=lambda piece: len(english_token_spans(piece)))
 
 
+def candidate_terms_from_context(
+    focus_word: str | None,
+    context: str | None,
+    *,
+    max_words: int = 5,
+) -> list[str]:
+    focus = clean_word(focus_word)
+    normalized = normalize_text(context)
+    if not focus:
+        return []
+    if not normalized:
+        return [focus]
+
+    token_spans = english_token_spans(normalized)
+    tokens = [clean_word(token) for token, _, _ in token_spans]
+    focus_lower = focus.lower()
+    focus_indexes = [
+        index
+        for index, token in enumerate(tokens)
+        if _token_matches_focus(token, focus_lower)
+    ]
+    if not focus_indexes:
+        return [focus]
+
+    candidates: list[str] = []
+    for index in focus_indexes:
+        longest = min(max_words, len(tokens))
+        for length in range(longest, 0, -1):
+            start_min = max(0, index - length + 1)
+            start_max = min(index, len(tokens) - length)
+            for start in range(start_min, start_max + 1):
+                candidate = " ".join(tokens[start : start + length]).strip()
+                if candidate:
+                    candidates.append(candidate)
+    candidates.append(focus)
+    return list(dict.fromkeys(candidates))
+
+
+def _token_matches_focus(token: str, focus_lower: str) -> bool:
+    token_lower = token.lower()
+    if token_lower == focus_lower:
+        return True
+    return focus_lower in {part for part in token_lower.split("-") if part}
+
+
 def distance(a: tuple[int, int], b: tuple[int, int]) -> float:
     return math.hypot(a[0] - b[0], a[1] - b[1])
